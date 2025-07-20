@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: projects-bff
+    version: ${version}
+  config:
+    import: optional:secrets.yml
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: exclusion
+              uri: no://op
+              predicates:
+                - name: Path
+                  args:
+                    - /api/login/options
+            - id: projects-api
+              uri: \${variables.api-host}
+              predicates:
+                - name: Path
+                  args:
+                    - /api/**
+              filters:
+                - name: DedupeResponseHeader
+                  args:
+                    - Access-Control-Allow-Credentials Access-Control-Allow-Origin
+                - name: SaveSession
+                - name: TokenRelay
+
+com:
+  c4-soft:
+    springaddons:
+      oidc:
+        client:
+          client-uri: \${variables.bff-host}
+          security-matchers:
+            - /api/**
+            - /login/**
+            - /oauth2/**
+            - /logout
+          permit-all:
+            - /api/**
+            - /login/**
+            - /oauth2/**
+          csrf: cookie-accessible-from-js
+          oauth2-redirections:
+            rp-initiated-logout: accepted
+        resourceserver:
+          permit-all:
+            - /api/login/options
+            - /error
+            - /actuator/health/readiness
+            - /actuator/health/liveness
+        cors:
+          - allowed-origin-patterns: \${variables.spa-host}
+            allowed-methods: GET, POST, PUT, PATCH, DELETE, OPTIONS
+            allowed-headers: Access-Control-Allow-Headers, Access-Control-Allow-Origin, Authorization, X-Requested-With, X-Auth-Token, Content-Type, Accept, X-CSRF-TOKEN, X-Frame-Options
+            exposed-headers: Content-Disposition
+            allow-credentials: true
+            max-age: 3600
