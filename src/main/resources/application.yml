@@ -21,6 +21,16 @@ spring:
                 - name: Path
                   args:
                     - /api/**
+                    - /v2/api-docs
+                    - /v3/api-docs
+                    - /v3/api-docs/**
+                    - /swagger-resources
+                    - /swagger-resources/**
+                    - /configuration/ui
+                    - /configuration/security
+                    - /swagger-ui/**
+                    - /webjars/**
+                    - /swagger-ui.html
               filters:
                 - name: DedupeResponseHeader
                   args:
@@ -49,9 +59,6 @@ com:
         resourceserver:
           permit-all:
             - /api/login/options
-            - /error
-            - /actuator/health/readiness
-            - /actuator/health/liveness
         cors:
           - allowed-origin-patterns: \${variables.spa-host}
             allowed-methods: GET, POST, PUT, PATCH, DELETE, OPTIONS
