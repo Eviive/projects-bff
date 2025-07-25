@@ -21,7 +21,7 @@ spring:
         registration:
           authentik:
             provider: authentik
-            scope: openid,profile,email,offline_access
+            scope: openid,profile,email,offline_access,entitlements
             authorization-grant-type: authorization_code
 
 com:
