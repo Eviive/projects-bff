@@ -56,6 +56,7 @@ com:
           csrf: cookie-accessible-from-js
           oauth2-redirections:
             rp-initiated-logout: accepted
+            authentication-entry-point: unauthorized
         resourceserver:
           permit-all:
             - /api/login/options

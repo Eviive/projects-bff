@@ -45,12 +45,12 @@ public class LoginOptionsService {
             final String loginUri = "%s/oauth2/authorization/%s"
                 .formatted(clientUri, registrationId);
 
-            LoginOptionDTO loginOption = new LoginOptionDTO(
-                providerId,
-                loginUri
+            loginOptions.add(
+                new LoginOptionDTO(
+                    providerId,
+                    loginUri
+                )
             );
-
-            loginOptions.add(loginOption);
         }
     }
 
