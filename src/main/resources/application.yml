@@ -59,7 +59,7 @@ spring:
 
 logging:
   file:
-    name: logs/projects-api.log
+    name: logs/projects-bff.log
 
 com:
   c4-soft:

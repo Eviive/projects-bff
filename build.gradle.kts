@@ -1,5 +1,4 @@
 import org.springframework.boot.gradle.tasks.aot.ProcessAot
-import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 
 plugins {
     id("java")
@@ -51,13 +50,10 @@ tasks.withType<ProcessResources> {
     }
 }
 
-tasks.withType<BootBuildImage> {
-    environment.put("BP_NATIVE_IMAGE_BUILD_ARGUMENTS", "--initialize-at-build-time=org.slf4j.helpers.Reporter")
-}
-
 graalvmNative {
     binaries {
         named("main") {
+            imageName = "bff"
             buildArgs.add("--initialize-at-build-time=org.slf4j.helpers.Reporter")
         }
     }
