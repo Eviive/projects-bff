@@ -1,11 +1,16 @@
+import org.springframework.boot.gradle.tasks.aot.ProcessAot
+import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
+
 plugins {
-    java
+    id("java")
+    id("idea")
     id("org.springframework.boot") version "3.5.3"
     id("io.spring.dependency-management") version "1.1.7"
+    id("org.graalvm.buildtools.native") version "0.11.0"
 }
 
 group = "dev.albertv.projects"
-version = "0.0.1-SNAPSHOT"
+version = "1.0.0"
 
 java {
     toolchain {
@@ -44,4 +49,20 @@ tasks.withType<ProcessResources> {
     filesMatching("**/application*.yml") {
         expand(project.properties)
     }
+}
+
+tasks.withType<BootBuildImage> {
+    environment.put("BP_NATIVE_IMAGE_BUILD_ARGUMENTS", "--initialize-at-build-time=org.slf4j.helpers.Reporter")
+}
+
+graalvmNative {
+    binaries {
+        named("main") {
+            buildArgs.add("--initialize-at-build-time=org.slf4j.helpers.Reporter")
+        }
+    }
+}
+
+tasks.withType<ProcessAot> {
+    args("--spring.profiles.active=prd")
 }

@@ -6,4 +6,4 @@
                |__/
 
 ${AnsiColor.GREEN} :: Spring Boot ${spring-boot.version} ::
-${AnsiColor.BRIGHT_RED} :: Projects-BFF ${spring.application.version} (${stage}) :: ${AnsiColor.BRIGHT_WHITE}
+${AnsiColor.BRIGHT_RED} :: Projects-BFF ${projects-bff.version} (${projects-bff.stage}) :: ${AnsiColor.BRIGHT_WHITE}
