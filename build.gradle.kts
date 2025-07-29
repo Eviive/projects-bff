@@ -55,6 +55,7 @@ graalvmNative {
         named("main") {
             imageName = "bff"
             buildArgs.add("--initialize-at-build-time=org.slf4j.helpers.Reporter")
+            buildArgs.add("-march=compatibility")
         }
     }
 }
