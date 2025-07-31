@@ -9,7 +9,6 @@ plugins {
 }
 
 group = "dev.albertv.projects"
-version = "1.0.0"
 
 java {
     toolchain {
