@@ -57,6 +57,12 @@ spring:
             scope: openid,profile,email,offline_access,entitlements
             authorization-grant-type: authorization_code
 
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
 logging:
   file:
     name: logs/projects-bff.log
