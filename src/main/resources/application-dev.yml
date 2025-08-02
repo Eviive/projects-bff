@@ -1,41 +1,16 @@
-stage: Development
+projects-bff:
+  stage: Development
 
 server:
   port: 8081
 
 variables:
-  bff-host: http://localhost:8081
-  api-host: http://localhost:8080
-  spa-host: http://localhost:3001
+  host:
+    bff: http://localhost:8081
+    api: http://localhost:8080
+    spa: http://localhost:3001
 
 spring:
   devtools:
     livereload:
       port: 35730
-  security:
-    oauth2:
-      client:
-        provider:
-          authentik:
-            user-name-attribute: preferred_username
-        registration:
-          authentik:
-            provider: authentik
-            scope: openid,profile,email,offline_access
-            authorization-grant-type: authorization_code
-
-com:
-  c4-soft:
-    springaddons:
-      oidc:
-        client:
-          post-login-redirect-host: \${variables.spa-host}
-          post-login-allowed-uri-patterns:
-            - ^\${variables.bff-host}(/.*)?\$
-            - ^/.*\$
-            - ^\${variables.spa-host}(/.*)?\$
-          post-logout-redirect-host: \${variables.spa-host}
-          post-logout-allowed-uri-patterns:
-            - ^\${variables.bff-host}(/.*)?\$
-            - ^/.*\$
-            - ^\${variables.spa-host}(/.*)?\$
