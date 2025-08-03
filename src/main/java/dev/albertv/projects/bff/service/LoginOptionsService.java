@@ -32,7 +32,10 @@ public class LoginOptionsService {
 
         final Map<String, OAuth2ClientProperties.Registration> registrations = oAuth2ClientProperties.getRegistration();
 
-        for (final Map.Entry<String, OAuth2ClientProperties.Registration> registrationEntry : registrations.entrySet()) {
+        for (
+            final Map.Entry<String, OAuth2ClientProperties.Registration> registrationEntry :
+            registrations.entrySet()
+        ) {
             final OAuth2ClientProperties.Registration registration = registrationEntry.getValue();
 
             if (!"authorization_code".equals(registration.getAuthorizationGrantType())) {
