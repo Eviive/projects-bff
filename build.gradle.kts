@@ -3,6 +3,7 @@ import org.springframework.boot.gradle.tasks.aot.ProcessAot
 plugins {
     id("java")
     id("idea")
+    id("checkstyle")
     id("org.springframework.boot") version "3.5.3"
     id("io.spring.dependency-management") version "1.1.7"
     id("org.graalvm.buildtools.native") version "0.11.0"
@@ -14,6 +15,10 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
+}
+
+checkstyle {
+    toolVersion = "10.26.1"
 }
 
 repositories {
