@@ -1,0 +1,12 @@
+projects-bff:
+  stage: Production
+
+variables:
+  host:
+    bff: https://projects.home.albertv.dev
+    api: http://projects-api.projects.svc.cluster.local
+    spa: https://projects.home.albertv.dev
+  authentik:
+    issuer-uri: \${AUTHENTIK_ISSUER_URI:}
+    client-id: \${AUTHENTIK_CLIENT_ID:}
+    client-secret: \${AUTHENTIK_CLIENT_SECRET:}

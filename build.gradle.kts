@@ -1,16 +1,24 @@
+import org.springframework.boot.gradle.tasks.aot.ProcessAot
+
 plugins {
-    java
+    id("java")
+    id("idea")
+    id("checkstyle")
     id("org.springframework.boot") version "3.5.3"
     id("io.spring.dependency-management") version "1.1.7"
+    id("org.graalvm.buildtools.native") version "0.11.0"
 }
 
 group = "dev.albertv.projects"
-version = "0.0.1-SNAPSHOT"
 
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
+}
+
+checkstyle {
+    toolVersion = "10.26.1"
 }
 
 repositories {
@@ -20,6 +28,7 @@ repositories {
 dependencies {
     // Spring Boot
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 
@@ -44,4 +53,18 @@ tasks.withType<ProcessResources> {
     filesMatching("**/application*.yml") {
         expand(project.properties)
     }
+}
+
+graalvmNative {
+    binaries {
+        named("main") {
+            imageName = "bff"
+            buildArgs.add("--initialize-at-build-time=org.slf4j.helpers.Reporter")
+            buildArgs.add("-march=compatibility")
+        }
+    }
+}
+
+tasks.withType<ProcessAot> {
+    args("--spring.profiles.active=prd")
 }

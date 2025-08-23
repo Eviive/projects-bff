@@ -20,7 +20,7 @@ public class LoginOptionsController {
     private final LoginOptionsService service;
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<LoginOptionDTO>> getLoginOptions() {
+    public ResponseEntity<List<LoginOptionDTO>> findLoginOptions() {
         return ResponseEntity.ok(service.getLoginOptions());
     }
 

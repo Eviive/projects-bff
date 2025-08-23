@@ -1,9 +1,14 @@
+projects-bff:
+  version: ${version}
+
 spring:
   application:
     name: projects-bff
-    version: ${version}
+    version: \${projects-bff.version}
   config:
     import: optional:secrets.yml
+  jackson:
+    default-property-inclusion: NON_NULL
   cloud:
     gateway:
       server:
@@ -16,24 +21,58 @@ spring:
                   args:
                     - /api/login/options
             - id: projects-api
-              uri: \${variables.api-host}
+              uri: \${variables.host.api}
               predicates:
                 - name: Path
                   args:
                     - /api/**
+                    - /v2/api-docs
+                    - /v3/api-docs
+                    - /v3/api-docs/**
+                    - /swagger-resources
+                    - /swagger-resources/**
+                    - /configuration/ui
+                    - /configuration/security
+                    - /swagger-ui/**
+                    - /webjars/**
+                    - /swagger-ui.html
               filters:
                 - name: DedupeResponseHeader
                   args:
                     - Access-Control-Allow-Credentials Access-Control-Allow-Origin
                 - name: SaveSession
                 - name: TokenRelay
+  security:
+    oauth2:
+      client:
+        provider:
+          authentik:
+            issuer-uri: \${variables.authentik.issuer-uri}
+            user-name-attribute: preferred_username
+        registration:
+          authentik:
+            provider: authentik
+            client-id: \${variables.authentik.client-id}
+            client-secret: \${variables.authentik.client-secret}
+            scope: openid,profile,email,offline_access,entitlements
+            authorization-grant-type: authorization_code
+
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+logging:
+  file:
+    name: logs/projects-bff.log
 
 com:
   c4-soft:
     springaddons:
       oidc:
         client:
-          client-uri: \${variables.bff-host}
+          client-uri: \${variables.host.bff}
           security-matchers:
             - /api/**
             - /login/**
@@ -46,14 +85,26 @@ com:
           csrf: cookie-accessible-from-js
           oauth2-redirections:
             rp-initiated-logout: accepted
+            authentication-entry-point: unauthorized
+          post-login-redirect-host: \${variables.host.spa}
+          post-login-allowed-uri-patterns:
+            - ^\${variables.host.bff}(/.*)?\$
+            - ^/.*\$
+            - ^\${variables.host.spa}(/.*)?\$
+          post-logout-redirect-host: \${variables.host.spa}
+          post-logout-allowed-uri-patterns:
+            - ^\${variables.host.bff}(/.*)?\$
+            - ^/.*\$
+            - ^\${variables.host.spa}(/.*)?\$
         resourceserver:
           permit-all:
             - /api/login/options
-            - /error
-            - /actuator/health/readiness
-            - /actuator/health/liveness
+        ops:
+          - iss: \${variables.authentik.issuer-uri}
+            authorities:
+              - path: \$.groups
         cors:
-          - allowed-origin-patterns: \${variables.spa-host}
+          - allowed-origin-patterns: \${variables.host.spa}
             allowed-methods: GET, POST, PUT, PATCH, DELETE, OPTIONS
             allowed-headers: Access-Control-Allow-Headers, Access-Control-Allow-Origin, Authorization, X-Requested-With, X-Auth-Token, Content-Type, Accept, X-CSRF-TOKEN, X-Frame-Options
             exposed-headers: Content-Disposition
