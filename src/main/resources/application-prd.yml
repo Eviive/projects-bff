@@ -3,9 +3,9 @@ projects-bff:
 
 variables:
   host:
-    bff: https://projects.home.albertv.dev
+    bff: https://projects.albertv.dev
     api: http://projects-api.projects.svc.cluster.local
-    spa: https://projects.home.albertv.dev
+    spa: https://projects.albertv.dev
   authentik:
     issuer-uri: \${AUTHENTIK_ISSUER_URI:}
     client-id: \${AUTHENTIK_CLIENT_ID:}
